@@ -100,7 +100,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -108,8 +112,8 @@ JAZZMIN_SETTINGS = {
     "site_title": "Gestão de Doações",
     "site_header": "Fundo Social",
     "site_brand": "Fundo Social",
-    "site_logo": "image/BrasaoAraraquara.png",
-    "login_logo": "image/BrasaoAraraquara.png",
+    "site_logo": "image/BrasaoAraraquara_300px.png",
+    "login_logo": "image/BrasaoAraraquara_300px.png",
     #"login_logo_dark": None,
     #"site_logo_classes": "img-circle",
     "site_icon": None,

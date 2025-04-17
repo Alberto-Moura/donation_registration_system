@@ -4,7 +4,7 @@ from .models import TypesBeneficiary, Beneficiary
 
 @admin.register(TypesBeneficiary)
 class TypesBeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ('type', 'id', 'created_at', 'updated_at')
+    list_display = ('type', 'created_at', 'updated_at')
     search_fields = ('type',)
     list_filter = ('type',)
     ordering = ('type',)
@@ -13,7 +13,7 @@ class TypesBeneficiaryAdmin(admin.ModelAdmin):
 
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id', 'cpf', 'typesBeneficiary', 'address', 'number', 'phone_1', 'phone_2', 'neighborhood', 'created_at', 'updated_at')
+    list_display = ('name', 'cpf', 'typesBeneficiary', 'address', 'number', 'phone_1', 'phone_2', 'neighborhood', 'created_at', 'updated_at')
     search_fields = ('name', 'address', 'number', 'phone')
     list_filter = ('typesBeneficiary', 'name', 'address', 'neighborhood')
     ordering = ('name',)

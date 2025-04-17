@@ -5,9 +5,21 @@ from django.core.exceptions import ValidationError
 
 # Tipos de Instituições
 class TypesInstitution(models.Model):
-    type = models.CharField(max_length=50, unique=True, verbose_name='Tipo de Instituição')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Data de Atualização')
+    type = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='Tipo de Instituição')
+    observation = models.TextField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Observação')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data de Criação')
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Data de Atualização')
 
     class Meta:
         ordering = ['type']
@@ -19,6 +31,8 @@ class TypesInstitution(models.Model):
 
     def clean(self):
         self.type = self.type.upper()
+        self.observation = self.observation.upper()
+
         if TypesInstitution.objects.filter(type=self.type).exclude(pk=self.pk).exists():
             raise ValidationError({'type': 'Já existe um tipo de instituição com esse nome.'})
 
@@ -29,15 +43,51 @@ class TypesInstitution(models.Model):
 
 # Cadastro Instituições
 class Institution(models.Model):
-    typesInstitution = models.ForeignKey(TypesInstitution, on_delete=models.PROTECT, related_name='institution', verbose_name='Tipo de Instituição')
-    name = models.CharField(max_length=255, unique=True, verbose_name='Nome da Instituição')
-    cnpj = models.CharField(max_length=15, unique=True, blank=True, null=True, verbose_name='CNPJ')
-    address = models.CharField(max_length=255, blank=True, null=True, verbose_name='Endereço da Instituição')
-    number = models.CharField(max_length=10, blank=True, null=True, verbose_name='Número')
-    phone = models.CharField(max_length=15, blank=True, null=True, verbose_name='Telefone')
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.PROTECT, related_name='institution', verbose_name='Bairro')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Data de Atualização')
+    typesInstitution = models.ForeignKey(
+        TypesInstitution,
+        on_delete=models.PROTECT,
+        related_name='typesInstitution',
+        verbose_name='Tipo de Instituição')
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Nome da Instituição')
+    cnpj = models.CharField(
+        max_length=15,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name='CNPJ')
+    address = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Endereço da Instituição')
+    number = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        verbose_name='Número')
+    neighborhood = models.ForeignKey(
+        Neighborhood,
+        on_delete=models.PROTECT,
+        verbose_name='Bairro')
+    email = models.EmailField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name='Email')
+    phone = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name='Telefone')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data de Criação')
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Data de Atualização')
 
     class Meta:
         ordering = ['name']

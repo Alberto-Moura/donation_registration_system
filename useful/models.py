@@ -1,12 +1,20 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 
 # Cadastro dos Bairros
 class Neighborhood(models.Model):
-    neighborhood = models.CharField(max_length=255, unique=True, verbose_name='Nome do Bairro')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Data de Atualização')
+    neighborhood = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='Nome do Bairro')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data de Criação')
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Data de Atualização')
 
     class Meta:
         ordering = ['neighborhood']
@@ -29,10 +37,38 @@ class Neighborhood(models.Model):
 
 # Cadastro dos Bairros
 class Crass(models.Model):
-    crassOrigin = models.CharField(max_length=255, unique=True, verbose_name='Nome do Crass')
-    name = models.CharField(max_length=255, blank=True, null=True, verbose_name='Nome do Responsável')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Data de Atualização')
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name='crass_user',
+        verbose_name='Crass')
+    crassOrigin = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='Nome do Crass')
+    name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='Nome do Responsável')
+    phone = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name='Telefone')
+    email = models.EmailField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Email')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data de Criação')
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Data de Atualização')
 
     class Meta:
         ordering = ['crassOrigin']

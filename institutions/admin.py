@@ -4,7 +4,7 @@ from .models import TypesInstitution, Institution
 
 @admin.register(TypesInstitution)
 class TypesInstitutionAdmin(admin.ModelAdmin):
-    list_display = ('type', 'id', 'created_at', 'updated_at')
+    list_display = ('type', 'created_at', 'updated_at')
     search_fields = ('type',)
     list_filter = ('type',)
     ordering = ('type',)
@@ -13,7 +13,7 @@ class TypesInstitutionAdmin(admin.ModelAdmin):
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cnpj', 'id', 'typesInstitution', 'address', 'number', 'phone', 'neighborhood', 'created_at', 'updated_at')
+    list_display = ('name', 'cnpj', 'typesInstitution', 'address', 'number', 'phone', 'neighborhood', 'created_at', 'updated_at')
     search_fields = ('name', 'address', 'number', 'phone')
     list_filter = ('typesInstitution', 'name')
     ordering = ('name',)
