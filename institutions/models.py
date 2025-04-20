@@ -8,7 +8,7 @@ class TypesInstitution(models.Model):
     type = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name='Tipo de Instituição')
+        verbose_name='Tipo')
     observation = models.TextField(
         max_length=255,
         blank=True,
@@ -23,8 +23,8 @@ class TypesInstitution(models.Model):
 
     class Meta:
         ordering = ['type']
-        verbose_name = 'Tipo de Instituição'
-        verbose_name_plural = 'Tipos de Instituições'
+        verbose_name = 'Tipo'
+        verbose_name_plural = 'Tipos'
 
     def __str__(self):
         return self.type
@@ -47,7 +47,7 @@ class Institution(models.Model):
         TypesInstitution,
         on_delete=models.PROTECT,
         related_name='typesInstitution',
-        verbose_name='Tipo de Instituição')
+        verbose_name='Tipo')
     name = models.CharField(
         max_length=100,
         verbose_name='Nome da Instituição')
@@ -91,8 +91,8 @@ class Institution(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Instituição'
-        verbose_name_plural = 'Instituições'
+        verbose_name = 'Cadastrar'
+        verbose_name_plural = 'Cadastrar'
 
     def __str__(self):
         return self.name
