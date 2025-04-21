@@ -5,6 +5,9 @@ from beneficiaries.models import TypesBeneficiary, Beneficiary
 from institutions.models import Institution, TypesInstitution
 
 
+def is_anon_type(typesInstitution):
+    return typesInstitution and typesInstitution.type.upper() == "ANÔNIMO"
+
 # Cadastro Instituições
 class donation_entry(models.Model):
     date_of_contact = models.DateField(
@@ -24,38 +27,35 @@ class donation_entry(models.Model):
         Institution,
         on_delete=models.PROTECT,
         related_name='institution',
-        verbose_name='Nome do Doador')
+        verbose_name='Nome do Doador',
+        null=True,
+        blank=True)
     address = models.CharField(
         max_length=255,
         blank=True,
         null=True,
-        verbose_name='Endereço do beneficiário')
+        verbose_name='Endereço')
     number = models.CharField(
         max_length=10,
         blank=True,
         null=True,
         verbose_name='Número')
-    phone_1 = models.CharField(
-        max_length=15,
-        blank=True,
-        null=True,
-        verbose_name='Telefone Principal')
-    contact = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-        verbose_name='Contato')
     neighborhood = models.ForeignKey(
         Neighborhood,
         on_delete=models.PROTECT,
         blank=True,
         null=True,
         verbose_name='Bairro')
-    crassOrigin = models.ForeignKey(
-        Crass,
-        on_delete=models.PROTECT,
-        related_name='crass_origin',
-        verbose_name='CRAS de Origem')
+    phone = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name='Telefone')
+    contact = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        verbose_name='Contato')
     observation = models.TextField(
         max_length=255,
         blank=True,
@@ -69,22 +69,32 @@ class donation_entry(models.Model):
         verbose_name='Data de Atualização')
 
     class Meta:
-        ordering = ['name']
-        verbose_name = 'Beneficiário'
-        verbose_name_plural = 'Beneficiários'
+        ordering = ['id']
+        verbose_name = 'Cadastrar Entrada'
+        verbose_name_plural = 'Cadastrar Entradas'
 
     def __str__(self):
-        return self.name
+        return str(self.name) if self.name else "ANÔNIMO"
 
     def clean(self):
-        self.cpf = self.cpf.replace('.', '').replace('-', '').replace('/', '')
-        self.name = self.name.upper()
-        self.address = self.address.upper()
-        self.observation = self.observation.upper()
-
-        if Beneficiary.objects.filter(cpf=self.cpf).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe um beneficiário com esse CPF.'})
-
+        if self.address:
+            self.address = self.address.upper()
+        if self.contact:
+            self.contact = self.contact.upper()
+        if self.observation:
+            self.observation = self.observation.upper()
+            
     def save(self, *args, **kwargs):
-        self.full_clean()
+        if is_anon_type(self.typesInstitution):
+            self.name = None
+            if not self.address:
+                self.address = None
+            if not self.phone:
+                self.phone = None
+            if not self.contact:
+                self.contact = None
+            if not self.number:
+                self.number = None
+            if not self.neighborhood:
+                self.neighborhood = None
         super().save(*args, **kwargs)

@@ -69,8 +69,15 @@ class Institution(models.Model):
         verbose_name='Número')
     neighborhood = models.ForeignKey(
         Neighborhood,
-        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
         verbose_name='Bairro')
+    contact = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='Contato')
     email = models.EmailField(
         max_length=255,
         unique=True,
@@ -100,6 +107,7 @@ class Institution(models.Model):
     def clean(self):
         self.name = self.name.upper()
         self.address = self.address.upper()
+        self.contact = self.contact.upper()
 
         if Institution.objects.filter(name=self.name).exclude(pk=self.pk).exists():
             raise ValidationError({'name': 'Já existe uma instituição com esse nome.'})

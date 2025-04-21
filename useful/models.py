@@ -43,11 +43,11 @@ class Crass(models.Model):
         blank=True,
         null=True,
         related_name='crass_user',
-        verbose_name='Crass')
+        verbose_name='Cras')
     crassOrigin = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name='Nome do Crass')
+        verbose_name='Nome do Cras')
     name = models.CharField(
         max_length=100,
         blank=True,
@@ -72,8 +72,8 @@ class Crass(models.Model):
 
     class Meta:
         ordering = ['crassOrigin']
-        verbose_name = 'Nome do Crass'
-        verbose_name_plural = 'Nomes dos Crass'
+        verbose_name = 'Nome do Cras'
+        verbose_name_plural = 'Nomes dos Cras'
 
     def __str__(self):
         return self.crassOrigin
@@ -83,7 +83,7 @@ class Crass(models.Model):
         self.name = self.name.upper()
 
         if Crass.objects.filter(crassOrigin=self.crassOrigin).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe um Crass com esse nome.'})
+            raise ValidationError({'name': 'Já existe um Cras com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
