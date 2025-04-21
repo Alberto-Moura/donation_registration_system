@@ -13,3 +13,15 @@ def institution_data(request, pk):
         })
     except Institution.DoesNotExist:
         return JsonResponse({'error': 'Institution not found'}, status=404)
+
+def institution_by_type(request, type_id):
+    try:
+        institutions = Institution.objects.filter(typesInstitution_id=type_id)
+        data = [
+            {'id': inst.id, 'name': inst.name}
+            for inst in institutions
+        ]
+        return JsonResponse({'result': data})
+    
+    except Institution.DoesNotExist:
+        return JsonResponse({'error': 'Institutions not found'}, status=404)

@@ -17,6 +17,8 @@ class donation_entry(models.Model):
         null=True,
         verbose_name='Data de Retirada')
     pick_up_time = models.TimeField(
+        blank=True,
+        null=True,
        verbose_name='Hora de Retirada')
     typesInstitution = models.ForeignKey(
         TypesInstitution,

@@ -1,23 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("📦 JS de auto-preenchimento carregado!");
-
     function bindInstitutionChange() {
         const institutionSelect = document.getElementById('id_name');
-        console.log("📦 Campo institutionSelect encontrado:", institutionSelect);
-
         if (!institutionSelect) {
-            console.warn("❗ Campo 'id_name' não encontrado.");
             return;
         }
 
-        // Usar evento do Select2!
         $(institutionSelect).on('select2:select', function (e) {
-            console.warn("✅ Evento select2:select disparado.");
             const institutionID = e.params.data.id;
-            console.log("🔎 ID selecionado:", institutionID);
 
             if (!institutionID || institutionID === "---------") {
-                console.warn("⚠️ Nenhuma instituição válida selecionada.");
                 return;
             }
 
@@ -27,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    console.log("✅ Dados recebidos:", data);
                     document.getElementById('id_address').value = data.address || '';
                     document.getElementById('id_number').value = data.number || '';
                     document.getElementById('id_phone').value = data.phone || '';
@@ -35,14 +25,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.neighborhood) {
                         const neighborhoodSelect = document.getElementById('id_neighborhood');
                         if (neighborhoodSelect) {
-                            console.log("🏘️ Bairro selecionado:", data.neighborhood);
                             neighborhoodSelect.value = data.neighborhood;
                             neighborhoodSelect.dispatchEvent(new Event('change'));
                         }
                     }
                 })
                 .catch(error => {
-                    console.error('❌ Erro ao buscar dados da instituição:', error);
+                    console.error('Erro ao buscar dados da instituição:', error);
                 });
         });
     }
@@ -51,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const select = document.getElementById('id_name');
         if (select) {
             bindInstitutionChange();
-            console.log("✅ Evento conectado ao campo com Select2.");
             observer.disconnect();
         }
     });

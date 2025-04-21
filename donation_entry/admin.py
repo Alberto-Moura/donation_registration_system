@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import donation_entry
+from institutions.models import Institution
 
 
 @admin.register(donation_entry)
@@ -11,4 +12,7 @@ class DonationEntryAdmin(admin.ModelAdmin):
     list_per_page = 40
 
     class Media:
-        js = ('donation_entry/js/institution_autofill.js',)
+        js = (
+            'donation_entry/js/institution_autofill.js',
+            'donation_entry/js/institution_filter.js',
+        )
