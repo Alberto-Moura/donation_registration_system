@@ -1,15 +1,15 @@
 from django.db import models
-from useful.models import Neighborhood, Crass
+from useful.models import Neighborhood
 from django.core.exceptions import ValidationError
-from beneficiaries.models import TypesBeneficiary, Beneficiary
 from institutions.models import Institution, TypesInstitution
+from products.models import Product, Acronym, Category
 
 
 def is_anon_type(typesInstitution):
     return typesInstitution and typesInstitution.type.upper() == "ANÔNIMO"
 
 # Cadastro Instituições
-class donation_entry(models.Model):
+class Donation_entry(models.Model):
     date_of_contact = models.DateField(
         verbose_name='Data de Contato')
     withdrawal_date = models.DateField(
@@ -100,3 +100,35 @@ class donation_entry(models.Model):
             if not self.neighborhood:
                 self.neighborhood = None
         super().save(*args, **kwargs)
+
+class DonatedItem(models.Model):
+    donation_entry = models.ForeignKey(
+        Donation_entry,
+        on_delete=models.CASCADE,
+        related_name='donated_items',
+        verbose_name='Entrada de Doação')
+    item_name = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,
+        related_name='product',
+        verbose_name='Nome do Item')
+    quantity = models.PositiveBigIntegerField(
+        verbose_name='Quantidade')
+    acronym = models.ForeignKey(
+        Acronym,
+        on_delete=models.PROTECT,
+        related_name='unit',
+        verbose_name='Unidade de Medida')
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name='category_item',
+        verbose_name='Categoria do Produto')
+    observation = models.TextField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='Observação')
+
+    def __str__(self):
+        return f"{self.quantity} x {self.item_name}"

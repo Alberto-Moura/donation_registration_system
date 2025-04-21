@@ -105,9 +105,12 @@ class Institution(models.Model):
         return self.name
 
     def clean(self):
-        self.name = self.name.upper()
-        self.address = self.address.upper()
-        self.contact = self.contact.upper()
+        if self.name:
+            self.name = self.name.upper()
+        if self.address:
+            self.address = self.address.upper()
+        if self.contact:
+            self.contact = self.contact.upper()
 
         if Institution.objects.filter(name=self.name).exclude(pk=self.pk).exists():
             raise ValidationError({'name': 'Já existe uma instituição com esse nome.'})
