@@ -1,12 +1,12 @@
 from django.db import models
 from useful.models import Neighborhood
-from django.core.exceptions import ValidationError
 from institutions.models import Institution, TypesInstitution
 from products.models import Product, Acronym, Category
 
 
 def is_anon_type(typesInstitution):
     return typesInstitution and typesInstitution.type.upper() == "ANÔNIMO"
+
 
 # Cadastro Instituições
 class Donation_entry(models.Model):
@@ -19,7 +19,7 @@ class Donation_entry(models.Model):
     pick_up_time = models.TimeField(
         blank=True,
         null=True,
-       verbose_name='Hora de Retirada')
+        verbose_name='Hora de Retirada')
     typesInstitution = models.ForeignKey(
         TypesInstitution,
         on_delete=models.PROTECT,
@@ -85,7 +85,7 @@ class Donation_entry(models.Model):
             self.contact = self.contact.upper()
         if self.observation:
             self.observation = self.observation.upper()
-            
+
     def save(self, *args, **kwargs):
         if is_anon_type(self.typesInstitution):
             self.name = None
@@ -100,6 +100,7 @@ class Donation_entry(models.Model):
             if not self.neighborhood:
                 self.neighborhood = None
         super().save(*args, **kwargs)
+
 
 class DonatedItem(models.Model):
     donation_entry = models.ForeignKey(

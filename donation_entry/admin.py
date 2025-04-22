@@ -20,10 +20,10 @@ class DonationEntryAdmin(admin.ModelAdmin):
     list_per_page = 40
     inlines = [DonatedItemInline]
 
-
     class Media:
         js = (
             'donation_entry/js/institution_autofill.js',
+            'donation_entry/js/institution_autofill_products.js',
             'donation_entry/js/institution_filter.js',
         )
 
