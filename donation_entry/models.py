@@ -1,7 +1,7 @@
 from django.db import models
 from useful.models import Neighborhood
 from institutions.models import Institution, TypesInstitution
-from products.models import Product, Acronym, Category
+from products.models import Product
 
 
 def is_anon_type(typesInstitution):
@@ -115,21 +115,16 @@ class DonatedItem(models.Model):
         verbose_name='Nome do Item')
     quantity = models.PositiveBigIntegerField(
         verbose_name='Quantidade')
-    acronym = models.ForeignKey(
-        Acronym,
-        on_delete=models.PROTECT,
-        related_name='unit',
-        verbose_name='Unidade de Medida')
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.PROTECT,
-        related_name='category_item',
-        verbose_name='Categoria do Produto')
     observation = models.TextField(
         max_length=100,
         blank=True,
         null=True,
         verbose_name='Observação')
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Cadastrar Entrada'
+        verbose_name_plural = 'Relatório de Entradas'
 
     def __str__(self):
         return f"{self.quantity} x {self.item_name}"
