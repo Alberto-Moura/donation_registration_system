@@ -59,7 +59,7 @@ class Beneficiary(models.Model):
         max_length=255,
         blank=True,
         null=True,
-        verbose_name='Endereço do beneficiário')
+        verbose_name='Endereço')
     number = models.CharField(
         max_length=10,
         blank=True,
@@ -81,11 +81,16 @@ class Beneficiary(models.Model):
         blank=True,
         null=True,
         verbose_name='Bairro')
+    complement = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='Complemento')
     crassOrigin = models.ForeignKey(
         Crass,
         on_delete=models.PROTECT,
         related_name='crass_origin',
-        verbose_name='CRASS de Origem')
+        verbose_name='CRAS de Origem')
     observation = models.TextField(
         max_length=255,
         blank=True,

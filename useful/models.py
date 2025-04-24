@@ -43,7 +43,7 @@ class Crass(models.Model):
         blank=True,
         null=True,
         related_name='crass_user',
-        verbose_name='Cras')
+        verbose_name='Usuário Cras')
     crassOrigin = models.CharField(
         max_length=100,
         unique=True,

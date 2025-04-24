@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 
 class DonatedItemInline(admin.TabularInline):
     model = DonatedItem
-    extra = 1
+    extra = 0
     readonly_fields = ('product_acronym', 'product_category')
     verbose_name = 'Item doado'
     verbose_name_plural = 'Itens doados'
@@ -47,15 +47,21 @@ class DonationEntryAdmin(admin.ModelAdmin):
     inlines = [DonatedItemInline]
 
     class Media:
+        css = {
+            'all': ('donation_entry/css/admin_custom.css',)
+        }
         js = (
             'donation_entry/js/institution_autofill.js',
             'donation_entry/js/institution_filter.js',
+            'donation_entry/js/move_add_button.js',
+            'donation_entry/js/product_autofill.js',
         )
 
 
 @admin.register(DonatedItem)
 class DonatedItemAdmin(admin.ModelAdmin):
     list_display = ('donation_id', 'date_of_contact', 'donor_name', 'item_name', 'quantity', 'product_acronym', 'product_category')
+    list_select_related = ('donation_entry', 'item_name')
     search_fields = ('donation_entry__id', 'donation_entry__name__name', 'item_name__name')
     list_filter = ('donation_entry__date_of_contact', 'donation_entry__typesInstitution')
     ordering = ('-donation_entry__date_of_contact',)

@@ -61,7 +61,7 @@ class Institution(models.Model):
         max_length=255,
         blank=True,
         null=True,
-        verbose_name='Endereço da Instituição')
+        verbose_name='Endereço')
     number = models.CharField(
         max_length=10,
         blank=True,
@@ -78,6 +78,11 @@ class Institution(models.Model):
         blank=True,
         null=True,
         verbose_name='Contato')
+    complement = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='Complemento')
     email = models.EmailField(
         max_length=255,
         unique=True,
