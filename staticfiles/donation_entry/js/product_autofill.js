@@ -2,20 +2,20 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('✅ JS de produto carregado');
 
     function bindProductAutofill(row) {
-        console.log('🆕 Nova linha detectada. Aplicando Select2.');
-        const select = row.querySelector('select[id$="-item_name"]');
-        if (!select) return;
+        const select = row.querySelector('[name$="-item_name"]');
+        if (!select) {
+            console.warn('⚠️ Campo item_name não encontrado na linha:', row);
+            return;
+        }
 
-        console.log('Não achou o select')
-        // Inicializa Select2 (caso não esteja ativado ainda)
+        // Inicializa Select2 (caso ainda não esteja ativado)
         if (!$(select).hasClass("select2-hidden-accessible")) {
             $(select).select2();
         }
 
-        // Escuta o evento correto
+        // Usa select2:select para pegar ID corretamente
         $(select).on('select2:select', function (e) {
             const productId = e.params.data.id;
-            console.log('📦 Buscando produto...');
             if (!productId) return;
 
             fetch(`/api/v1/product/${productId}/`)
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Aplica nas linhas existentes
     document.querySelectorAll('tr.dynamic-donated_items').forEach(bindProductAutofill);
 
-    // Nova linha inline
+    // Aplica para novas linhas
     document.addEventListener('formset:added', function (event) {
         bindProductAutofill(event.detail.form);
     });

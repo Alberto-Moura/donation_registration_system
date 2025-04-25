@@ -1,24 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
     const interval = setInterval(() => {
-        const addRowTr = document.querySelector('.inline-group .tabular tr.add-row');
-        const table = document.querySelector('.inline-group .tabular');
+        document.querySelectorAll('.inline-group .tabular').forEach((table) => {
+            const addRowTr = table.querySelector('tr.add-row');
+            if (addRowTr) {
+                const addButton = addRowTr.querySelector('a');
+                if (addButton) {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('custom-add-button');
+                    wrapper.style.marginTop = "15px";
+                    wrapper.style.textAlign = "left";
 
-        if (addRowTr && table) {
-            // Move o conteúdo do <td> (botão) para fora da tabela
-            const addButton = addRowTr.querySelector('a');
-            const wrapper = document.createElement('div');
+                    wrapper.appendChild(addButton);
+                    table.parentNode.insertBefore(wrapper, table.nextSibling);
+                    addRowTr.remove();
+                }
+            }
+        });
 
-            wrapper.classList.add('custom-add-button');
-            wrapper.style.marginTop = "15px";
-            wrapper.style.textAlign = "left";  // ou "right" se quiser à direita
-
-            wrapper.appendChild(addButton);
-            table.parentNode.insertBefore(wrapper, table.nextSibling);
-
-            // Remove a <tr> que estava na tabela
-            addRowTr.remove();
-
-            clearInterval(interval); // Para de tentar mover
+        // Quando terminar de processar todos, limpa o intervalo
+        if (document.querySelectorAll('.inline-group .tabular tr.add-row').length === 0) {
+            clearInterval(interval);
         }
-    }, 100); // tenta mover a cada 100ms até funcionar
+    }, 100); // tenta a cada 100ms até funcionar
 });

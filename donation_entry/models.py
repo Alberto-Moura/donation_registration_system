@@ -128,3 +128,31 @@ class DonatedItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.item_name}"
+
+
+class DonationDisposal(models.Model):
+    donation_entry = models.ForeignKey(
+        Donation_entry,
+        on_delete=models.CASCADE,
+        related_name='disposal_item',
+        verbose_name='Descarte de Doação')
+    item_name = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,
+        related_name='disposal_product',
+        verbose_name='Nome do Item')
+    quantity = models.PositiveBigIntegerField(
+        verbose_name='Quantidade')
+    observation = models.TextField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Observação')
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Cadastrar Entrada'
+        verbose_name_plural = 'Descartes de Doações'
+
+    def __str__(self):
+        return f"{self.quantity} x {self.item_name}"
