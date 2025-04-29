@@ -10,15 +10,43 @@ def is_anon_type(typesInstitution):
 
 # Cadastro Instituições
 class Donation_entry(models.Model):
+    OPTIONS_TYPE_DONATION = [
+        ("ENTRADA", "ENTRADA"),
+        ("DESCARTE", "DESCARTE"),
+        ("INVENTÁRIO", "INVENTÁRIO"),
+    ]
+    OPTIONS_TIME_WITHDRAWAL = [
+        ("PERÍODO DA MANHÃ", "PERÍODO DA MANHÃ"),
+        ("PERÍODO DA TARDE", "PERÍODO DA TARDE"),
+        ("07:00", "07:00"),
+        ("08:00", "08:00"),
+        ("09:00", "09:00"),
+        ("10:00", "10:00"),
+        ("11:00", "11:00"),
+        ("12:00", "12:00"),
+        ("13:00", "13:00"),
+        ("14:00", "14:00"),
+        ("15:00", "15:00"),
+        ("16:00", "16:00"),
+        ("17:00", "17:00"),
+        ("18:00", "18:00"),
+    ]
+    type_donation = models.CharField(
+        max_length=20,
+        choices=OPTIONS_TYPE_DONATION,
+        verbose_name='Tipo de Lançamento',
+        default='ENTRADA')
     date_of_contact = models.DateField(
-        verbose_name='Data de Contato')
+        verbose_name='Data de Contato ou Lançamento')
     withdrawal_date = models.DateField(
         blank=True,
         null=True,
-        verbose_name='Data de Retirada')
-    pick_up_time = models.TimeField(
+        verbose_name='Data de Retirada (Opcional)')
+    pick_up_time = models.CharField(
+        max_length=20,
         blank=True,
         null=True,
+        choices=OPTIONS_TIME_WITHDRAWAL,
         verbose_name='Hora de Retirada')
     typesInstitution = models.ForeignKey(
         TypesInstitution,

@@ -9,8 +9,8 @@ class DonatedItemInline(admin.TabularInline):
     model = DonatedItem
     extra = 0
     exclude = ('product_acronym', 'product_category')
-    verbose_name = 'Item doado'
-    verbose_name_plural = 'Itens doados'
+    verbose_name = 'Item Doado'
+    verbose_name_plural = 'Itens Doados'
 
     def product_acronym(self, obj):
         return obj.item_name.acronym
@@ -26,7 +26,7 @@ class DonatedDisposalInline(admin.TabularInline):
     extra = 0
     exclude = ('product_acronym', 'product_category')
     verbose_name = 'Item Descartado'
-    verbose_name_plural = 'Itens descartados'
+    verbose_name_plural = 'Itens Descartados'
 
     def product_acronym(self, obj):
         return obj.item_name.acronym
@@ -42,6 +42,7 @@ class DonationEntryAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     fields = (
         'id',
+        'type_donation',
         'date_of_contact',
         'withdrawal_date',
         'pick_up_time',
@@ -55,10 +56,10 @@ class DonationEntryAdmin(admin.ModelAdmin):
         'observation',
     )
 
-    list_display = ('id', 'date_of_contact', 'typesInstitution', 'name', 'created_at', 'updated_at')
-    search_fields = ('id', 'date_of_contact', 'typesInstitution__type', 'name__name')
-    list_filter = ('id', 'date_of_contact', 'typesInstitution', 'name')
-    ordering = ('id', 'date_of_contact', 'name')
+    list_display = ('id', 'type_donation', 'date_of_contact', 'typesInstitution', 'name', 'created_at', 'updated_at')
+    search_fields = ('id', 'type_donation', 'date_of_contact', 'typesInstitution__type', 'name__name')
+    list_filter = ('id', 'type_donation', 'date_of_contact', 'typesInstitution', 'name')
+    ordering = ('-id', 'date_of_contact', 'name')
     list_per_page = 40
     inlines = [DonatedItemInline, DonatedDisposalInline]
 
@@ -71,6 +72,7 @@ class DonationEntryAdmin(admin.ModelAdmin):
             'donation_entry/js/institution_filter.js',
             'donation_entry/js/move_add_button.js',
             'donation_entry/js/product_autofill.js',
+            #'donation_entry/js/toggle_inlines.js',
         )
 
 

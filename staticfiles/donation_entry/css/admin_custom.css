@@ -12,4 +12,15 @@
 
 .custom-add-button a:hover {
     background-color: #218838;
+    color: white;
+}
+
+#disposal_item-group .custom-add-button a {
+    background-color: #dc3545;
+}
+
+/* Hover do botão vermelho */
+#disposal_item-group .custom-add-button a:hover {
+    background-color: #b52a37;
+    color: white;
 }

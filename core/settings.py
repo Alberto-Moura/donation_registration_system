@@ -151,6 +151,7 @@ JAZZMIN_SETTINGS = {
         "beneficiaries.TypesBeneficiary":"fa-solid fa-people-group",
         "donation_entry.Donation_entry":"fa-solid fa-id-card",
         "donation_entry.DonatedItem":"fa-solid fa-file-lines",
+        "donation_entry.DonationDisposal":"fa-solid fa-house-crack",
         "products.Product":"fa-solid fa-box",
         "products.Category":"fa-solid fa-boxes-stacked",
         "products.Acronym":"fa-solid fa-box-open",
