@@ -72,7 +72,7 @@ class DonationEntryAdmin(admin.ModelAdmin):
             'donation_entry/js/institution_filter.js',
             'donation_entry/js/move_add_button.js',
             'donation_entry/js/product_autofill.js',
-            #'donation_entry/js/toggle_inlines.js',
+            'donation_entry/js/toggle_inlines.js',
         )
 
 

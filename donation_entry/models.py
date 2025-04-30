@@ -114,7 +114,7 @@ class Donation_entry(models.Model):
         if self.observation:
             self.observation = self.observation.upper()
 
-    def save(self, *args, **kwargs):
+    def save_related(self, request, form, formsets, change):
         if is_anon_type(self.typesInstitution):
             self.name = None
             if not self.address:
@@ -127,7 +127,15 @@ class Donation_entry(models.Model):
                 self.number = None
             if not self.neighborhood:
                 self.neighborhood = None
-        super().save(*args, **kwargs)
+
+        super().save_related(request, form, formsets, change)
+
+        # A lógica de exclusão de inlines vai aqui:
+        instance = form.instance
+        if instance.type_donation == 'DESCARTE':
+            instance.donated_items.all().delete()
+        elif instance.type_donation == 'INVENTÁRIO':
+            instance.disposal_item.all().delete()
 
 
 class DonatedItem(models.Model):
