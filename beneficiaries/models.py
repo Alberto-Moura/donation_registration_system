@@ -65,16 +65,6 @@ class Beneficiary(models.Model):
         blank=True,
         null=True,
         verbose_name='Número')
-    phone_1 = models.CharField(
-        max_length=15,
-        blank=True,
-        null=True,
-        verbose_name='Telefone Principal')
-    phone_2 = models.CharField(
-        max_length=15,
-        blank=True,
-        null=True,
-        verbose_name='Telefone Secundário')
     neighborhood = models.ForeignKey(
         Neighborhood,
         on_delete=models.PROTECT,
@@ -86,6 +76,16 @@ class Beneficiary(models.Model):
         blank=True,
         null=True,
         verbose_name='Complemento')
+    phone_1 = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name='Telefone Principal')
+    phone_2 = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        verbose_name='Telefone Secundário')
     crassOrigin = models.ForeignKey(
         Crass,
         on_delete=models.PROTECT,
@@ -114,8 +114,10 @@ class Beneficiary(models.Model):
     def clean(self):
         self.cpf = self.cpf.replace('.', '').replace('-', '').replace('/', '')
         self.name = self.name.upper()
-        self.address = self.address.upper()
-        self.observation = self.observation.upper()
+        if self.address:
+            self.address = self.address.upper()
+        if self.observation:
+            self.observation = self.observation.upper()
 
         if Beneficiary.objects.filter(cpf=self.cpf).exclude(pk=self.pk).exists():
             raise ValidationError({'name': 'Já existe um beneficiário com esse CPF.'})

@@ -156,5 +156,5 @@ class DonatedDisposalAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        extra_context['title'] = 'Visualização de Itens por Entrada'
+        extra_context['title'] = 'Visualização de Itens Descartados'
         return super().changelist_view(request, extra_context=extra_context)

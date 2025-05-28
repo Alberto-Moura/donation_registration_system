@@ -79,8 +79,10 @@ class Crass(models.Model):
         return self.crassOrigin
 
     def clean(self):
-        self.crassOrigin = self.crassOrigin.upper()
-        self.name = self.name.upper()
+        if self.crassOrigin:
+            self.crassOrigin = self.crassOrigin.upper()
+        if self.name:
+            self.name = self.name.upper()
 
         if Crass.objects.filter(crassOrigin=self.crassOrigin).exclude(pk=self.pk).exists():
             raise ValidationError({'name': 'Já existe um Cras com esse nome.'})

@@ -5,16 +5,27 @@ from products.models import Product
 
 
 def is_anon_type(typesInstitution):
+    """
+    Checks if the institution type is 'ANONYMOUS'.
+    """
     return typesInstitution and typesInstitution.type.upper() == "ANÔNIMO"
 
 
-# Cadastro Instituições
+# Donation Registration
 class Donation_entry(models.Model):
+    '''
+    Donation_entry class:
+    Represents the donation entry model.
+    '''
+
+    # Stock Entry Options
     OPTIONS_TYPE_DONATION = [
         ("ENTRADA", "ENTRADA"),
         ("DESCARTE", "DESCARTE"),
         ("INVENTÁRIO", "INVENTÁRIO"),
     ]
+
+    # Pickup time options
     OPTIONS_TIME_WITHDRAWAL = [
         ("PERÍODO DA MANHÃ", "PERÍODO DA MANHÃ"),
         ("PERÍODO DA TARDE", "PERÍODO DA TARDE"),
@@ -31,6 +42,8 @@ class Donation_entry(models.Model):
         ("17:00", "17:00"),
         ("18:00", "18:00"),
     ]
+
+    # Donation_entry model fields
     type_donation = models.CharField(
         max_length=20,
         choices=OPTIONS_TYPE_DONATION,
@@ -99,14 +112,26 @@ class Donation_entry(models.Model):
         verbose_name='Data de Atualização')
 
     class Meta:
+        '''
+        Meta class for Donation_entry:
+        Defines the ordering, singular and plural name of the model.
+        '''
         ordering = ['id']
         verbose_name = 'Cadastrar Entrada'
         verbose_name_plural = 'Cadastrar Entradas'
 
     def __str__(self):
+        '''
+        String representation function of the Donation_entry model:
+        Returns the name of the institution or "ANONYMOUS" if the name is not defined.
+        '''
         return str(self.name) if self.name else "ANÔNIMO"
 
     def clean(self):
+        '''
+        Donation_entry model cleanup function:
+        Converts text fields to uppercase.
+        '''
         if self.address:
             self.address = self.address.upper()
         if self.contact:
@@ -115,6 +140,10 @@ class Donation_entry(models.Model):
             self.observation = self.observation.upper()
 
     def save_related(self, request, form, formsets, change):
+        '''
+        Related save function of Donation_entry model:
+        Checks if the institution type is anonymous and sets the corresponding fields.
+        '''
         if is_anon_type(self.typesInstitution):
             self.name = None
             if not self.address:
@@ -130,7 +159,7 @@ class Donation_entry(models.Model):
 
         super().save_related(request, form, formsets, change)
 
-        # A lógica de exclusão de inlines vai aqui:
+        # Logic for deleting inlines depends on the release type
         instance = form.instance
         if instance.type_donation == 'DESCARTE':
             instance.donated_items.all().delete()
@@ -139,6 +168,10 @@ class Donation_entry(models.Model):
 
 
 class DonatedItem(models.Model):
+    '''
+    DonatedItem Class:
+    Represents the donated items associated with a donation entry.
+    '''
     donation_entry = models.ForeignKey(
         Donation_entry,
         on_delete=models.CASCADE,
@@ -163,10 +196,18 @@ class DonatedItem(models.Model):
         verbose_name_plural = 'Relatório de Entradas'
 
     def __str__(self):
+        '''
+        String representation function of the DonatedItem model:
+        Returns the quantity and name of the donated item.
+        '''
         return f"{self.quantity} x {self.item_name}"
 
 
 class DonationDisposal(models.Model):
+    '''
+    Classe DonationDisposal:
+    Represents the donation discard associated with a donation entry.
+    '''
     donation_entry = models.ForeignKey(
         Donation_entry,
         on_delete=models.CASCADE,
