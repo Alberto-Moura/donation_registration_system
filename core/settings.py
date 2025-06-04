@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "beneficiaries",
     "donation_entry",
     "outflow_of_donations",
+
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,5 @@
 from django.db import models
 from useful.models import Neighborhood, Crass
-from institutions.models import Institution, TypesInstitution
 from products.models import Product
 from beneficiaries.models import Beneficiary, TypesBeneficiary
 
@@ -111,3 +110,8 @@ class Donated_exit_item(models.Model):
         blank=True,
         null=True,
         verbose_name='Observação')
+    
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Saída de Doação - Itens'
+        verbose_name_plural = 'Saídas de Doações - Itens'

@@ -48,12 +48,12 @@ class Donation_exit_admin(admin.ModelAdmin):
 
     class Media:
         css = {
-            # 'all': ('donation_entry/css/admin_custom.css',)
+             'all': ('./donation_entry/css/admin_custom.css',)
         }
         js = (
             # 'donation_entry/js/institution_autofill.js',
             # 'donation_entry/js/institution_filter.js',
-            # 'donation_entry/js/move_add_button.js',
+             './donation_entry/js/move_add_button.js',
             # 'donation_entry/js/product_autofill.js',
             # 'donation_entry/js/toggle_inlines.js',
         )
@@ -64,7 +64,7 @@ class Donated_item_exit_admin(admin.ModelAdmin):
     list_display = ('donation_id', 'date_of_contact', 'donor_name', 'item_name', 'quantity', 'product_acronym', 'product_category')
     list_select_related = ('donation_exit', 'item_name')
     search_fields = ('donation_exit__id', 'donation_exit__name__name', 'item_name__name')
-    list_filter = ('donation_exit__date_of_contact',)
+    list_filter = ('donation_exit__date_of_contact', 'donation_exit__name__name', 'donation_exit__document_id',)
     ordering = ('-donation_exit__date_of_contact',)
     list_per_page = 40
 
@@ -77,7 +77,7 @@ class Donated_item_exit_admin(admin.ModelAdmin):
         return obj.item_name.category
 
     def donation_id(self, obj):
-        url = reverse("admin:donation_exit_donation_exit_change", args=[obj.donation_exit.id])
+        url = reverse("admin:outflow_of_donations_donation_exit_change", args=[obj.donation_exit.id])
         return format_html('<a href="{}">{}</a>', url, obj.donation_exit.id)
     donation_id.short_description = 'ID Saída'
     donation_id.admin_order_field = 'donation_exit_id'
