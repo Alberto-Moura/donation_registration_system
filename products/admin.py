@@ -20,8 +20,8 @@ class AcronymAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'compound_quantity', 'category', 'acronym', 'created_at', 'updated_at')
-    list_filter = ('name', 'compound_quantity', 'category', 'acronym', 'created_at', 'updated_at')
-    search_fields = ('name', 'compound_quantity', 'category', 'acronym')
-    ordering = ('name', 'compound_quantity', 'category', 'acronym', 'created_at', 'updated_at')
+    list_display = ('code', 'name', 'compound_quantity', 'category', 'acronym', 'active', 'created_at', 'updated_at')
+    list_filter = ('code', 'name', 'compound_quantity', 'category', 'acronym', 'active', 'created_at', 'updated_at')
+    search_fields = ('code', 'name', 'compound_quantity', 'category', 'acronym')
+    ordering = ('code', 'name', 'compound_quantity', 'category', 'acronym', 'created_at', 'updated_at')
     list_per_page = 20

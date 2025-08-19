@@ -2,6 +2,7 @@ from django.db import models
 from useful.models import Neighborhood
 from institutions.models import Institution, TypesInstitution
 from products.models import Product
+from datetime import date
 
 
 def is_anon_type(typesInstitution):
@@ -44,6 +45,13 @@ class Donation_entry(models.Model):
     ]
 
     # Donation_entry model fields
+    registration_number = models.CharField(
+        max_length=20,
+        unique=True,
+        editable=False,
+        default='PADRÃO',
+        verbose_name='Número de Registro',
+        help_text='Número de registro único para a entrada de doação')
     type_donation = models.CharField(
         max_length=20,
         choices=OPTIONS_TYPE_DONATION,
@@ -60,7 +68,7 @@ class Donation_entry(models.Model):
         blank=True,
         null=True,
         choices=OPTIONS_TIME_WITHDRAWAL,
-        verbose_name='Hora de Retirada')
+        verbose_name='Hora de Retirada (Opcional)')
     typesInstitution = models.ForeignKey(
         TypesInstitution,
         on_delete=models.PROTECT,
@@ -70,35 +78,35 @@ class Donation_entry(models.Model):
         Institution,
         on_delete=models.PROTECT,
         related_name='institution',
-        verbose_name='Nome do Doador',
+        verbose_name='Nome do Doador (Opcional)',
         null=True,
         blank=True)
     address = models.CharField(
         max_length=255,
         blank=True,
         null=True,
-        verbose_name='Endereço')
+        verbose_name='Endereço (Opcional)')
     number = models.CharField(
         max_length=10,
         blank=True,
         null=True,
-        verbose_name='Número')
+        verbose_name='Número (Opcional)')
     neighborhood = models.ForeignKey(
         Neighborhood,
         on_delete=models.PROTECT,
         blank=True,
         null=True,
-        verbose_name='Bairro')
+        verbose_name='Bairro (Opcional)')
     phone = models.CharField(
         max_length=15,
         blank=True,
         null=True,
-        verbose_name='Telefone')
+        verbose_name='Telefone (Opcional)')
     contact = models.CharField(
         max_length=50,
         blank=True,
         null=True,
-        verbose_name='Contato')
+        verbose_name='Contato (Opcional)')
     observation = models.TextField(
         max_length=255,
         blank=True,
@@ -144,6 +152,12 @@ class Donation_entry(models.Model):
         Related save function of Donation_entry model:
         Checks if the institution type is anonymous and sets the corresponding fields.
         '''
+        if not self.registration_number:
+            last_registration_number = Donation_entry.objects.order_by('-id').first()
+            next_number = (last_registration_number.id + 1) if last_registration_number else 1
+            year = date.today().strftime('%Y')
+            self.registration_number = f'E{next_number:05d}/{year}'
+
         if is_anon_type(self.typesInstitution):
             self.name = None
             if not self.address:

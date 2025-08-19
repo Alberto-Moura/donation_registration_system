@@ -33,13 +33,14 @@ class Category(models.Model):
         self.observation = self.observation.upper()
 
         if Category.objects.filter(name=self.name).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe uma categoria com esse nome.'})
+            raise ValidationError({'Nome': 'Já existe uma categoria com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
 
 
+# Cadastro das siglas
 class Acronym(models.Model):
     acronym = models.CharField(
         max_length=4,
@@ -47,6 +48,8 @@ class Acronym(models.Model):
         verbose_name='Sigla')
     description = models.CharField(
         max_length=100,
+        blank=True,
+        null=True,
         verbose_name='Descrição')
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -68,7 +71,7 @@ class Acronym(models.Model):
         self.description = self.description.upper()
 
         if Acronym.objects.filter(acronym=self.acronym).exclude(pk=self.pk).exists():
-            raise ValidationError({'acronym': 'Já existe uma sigla com esse nome.'})
+            raise ValidationError({'Sigla': 'Já existe uma sigla com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -77,11 +80,17 @@ class Acronym(models.Model):
 
 # Cadastro dos produtos
 class Product(models.Model):
+    code = models.CharField(
+        max_length=20,
+        unique=True,
+        default='Null',
+        editable=False)
     name = models.CharField(
         max_length=100,
         unique=True,
         verbose_name='Nome do Produto')
     unit_quantity = models.PositiveIntegerField(
+        default=0,
         verbose_name='Quantidade Unitária')
     compound_quantity = models.PositiveIntegerField(
         default=1,
@@ -106,6 +115,8 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name='Data de Atualização')
+    active = models.BooleanField(
+        default=True)
 
     class Meta:
         ordering = ['name']
@@ -113,15 +124,19 @@ class Product(models.Model):
         verbose_name_plural = 'Produtos'
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.code}'
 
     def clean(self):
         self.name = self.name.upper()
         self.observation = self.observation.upper()
 
-        if Category.objects.filter(name=self.name).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe um produto com esse nome.'})
+        if Product.objects.filter(name=self.name).exclude(pk=self.pk).exists():
+            raise ValidationError({'Nome': 'Já existe um produto com esse nome.'})
 
     def save(self, *args, **kwargs):
+        if not self.code:
+            last_code = Product.objects.order_by('-id').first()
+            next_number = (last_code.id + 1) if last_code else 1
+            self.code = f'P{next_number:06d}'
         self.full_clean()
         super().save(*args, **kwargs)

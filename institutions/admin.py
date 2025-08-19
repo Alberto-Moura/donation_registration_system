@@ -13,7 +13,7 @@ class TypesInstitutionAdmin(admin.ModelAdmin):
 
 @admin.register(Institution)
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cnpj', 'typesInstitution', 'address', 'number', 'phone', 'neighborhood', 'created_at', 'updated_at')
+    list_display = ('name', 'cnpj', 'typesInstitution', 'address', 'number', 'phone', 'neighborhood', 'active', 'created_at', 'updated_at')
     search_fields = ('name', 'address', 'number', 'phone')
     list_filter = ('typesInstitution', 'name')
     ordering = ('name',)

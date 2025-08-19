@@ -13,7 +13,7 @@ class TypesBeneficiaryAdmin(admin.ModelAdmin):
 
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cpf', 'typesBeneficiary', 'address', 'number', 'phone_1', 'phone_2', 'neighborhood', 'created_at', 'updated_at')
+    list_display = ('name', 'cpf', 'typesBeneficiary', 'ethnicty', 'address', 'number', 'phone_1', 'phone_2', 'neighborhood', 'active', 'created_at', 'updated_at')
     search_fields = ('name', 'address', 'number', 'phone')
     list_filter = ('typesBeneficiary', 'name', 'address', 'neighborhood')
     ordering = ('name',)

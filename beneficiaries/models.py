@@ -1,6 +1,7 @@
 from django.db import models
 from useful.models import Neighborhood, Crass
 from django.core.exceptions import ValidationError
+from validate_docbr import CPF
 
 
 # Tipos de Instituições
@@ -34,7 +35,45 @@ class TypesBeneficiary(models.Model):
         self.observation = self.observation.upper()
 
         if TypesBeneficiary.objects.filter(type=self.type).exclude(pk=self.pk).exists():
-            raise ValidationError({'type': 'Já existe um tipo de beneficiário com esse nome.'})
+            raise ValidationError({'Tipo': 'Já existe esse tipo de beneficiário cadastrado.'})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+
+# Etnia
+class TypesEthnicity(models.Model):
+    type = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name='Raça/Etnia')
+    observation = models.TextField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Observação')
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data de Criação')
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Data de Atualização')
+
+    class Meta:
+        ordering = ['type']
+        verbose_name = 'Raça/Etnia'
+        verbose_name_plural = 'Raças/Etnias'
+
+    def __str__(self):
+        return self.type
+
+    def clean(self):
+        self.type = self.type.upper()
+        self.observation = self.observation.upper()
+
+        if TypesBeneficiary.objects.filter(type=self.type).exclude(pk=self.pk).exists():
+            raise ValidationError({'Raça/Etinia': 'Já existe essa raça e/ou etnia cadastrada.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -55,6 +94,12 @@ class Beneficiary(models.Model):
         max_length=15,
         unique=True,
         verbose_name='CPF')
+    ethnicty = models.ForeignKey(
+        TypesEthnicity,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name='Raça/Etnia')
     address = models.CharField(
         max_length=255,
         blank=True,
@@ -102,6 +147,8 @@ class Beneficiary(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name='Data de Atualização')
+    active = models.BooleanField(
+        default=True)
 
     class Meta:
         ordering = ['name']
@@ -120,7 +167,11 @@ class Beneficiary(models.Model):
             self.observation = self.observation.upper()
 
         if Beneficiary.objects.filter(cpf=self.cpf).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe um beneficiário com esse CPF.'})
+            raise ValidationError({'Nome': 'Já existe um beneficiário com esse CPF.'})
+
+        cpf_validator = CPF()
+        if not cpf_validator.validate(self.cpf):
+            raise ValidationError({'CPF': 'CPF inválido. Verifique e tente novamente.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()

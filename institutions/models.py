@@ -1,6 +1,7 @@
 from django.db import models
 from useful.models import Neighborhood
 from django.core.exceptions import ValidationError
+from validate_docbr import CNPJ
 
 
 # Tipos de Instituições
@@ -34,7 +35,7 @@ class TypesInstitution(models.Model):
         self.observation = self.observation.upper()
 
         if TypesInstitution.objects.filter(type=self.type).exclude(pk=self.pk).exists():
-            raise ValidationError({'type': 'Já existe um tipo de instituição com esse nome.'})
+            raise ValidationError({'Tipo': 'Já existe um tipo de instituição com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -100,6 +101,8 @@ class Institution(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name='Data de Atualização')
+    active = models.BooleanField(
+        default=True)
 
     class Meta:
         ordering = ['name']
@@ -118,7 +121,13 @@ class Institution(models.Model):
             self.contact = self.contact.upper()
 
         if Institution.objects.filter(name=self.name).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe uma instituição com esse nome.'})
+            raise ValidationError({'Nome': 'Já existe uma instituição com esse nome.'})
+
+        cnpj_validator = CNPJ()
+        if self.cnpj:
+            self.cnpj = self.cnpj.replace('.', '').replace('-', '').replace('/', '')
+            if not cnpj_validator.validate(self.cnpj):
+                raise ValidationError({'CNPJ': 'CNPJ inválido.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()

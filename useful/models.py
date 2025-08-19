@@ -28,7 +28,7 @@ class Neighborhood(models.Model):
         self.neighborhood = self.neighborhood.upper()
 
         if Neighborhood.objects.filter(neighborhood=self.neighborhood).exclude(pk=self.pk).exists():
-            raise ValidationError({'neighborhood': 'Já existe um bairro com esse nome.'})
+            raise ValidationError({'Bairro': 'Já existe um bairro com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -85,7 +85,7 @@ class Crass(models.Model):
             self.name = self.name.upper()
 
         if Crass.objects.filter(crassOrigin=self.crassOrigin).exclude(pk=self.pk).exists():
-            raise ValidationError({'name': 'Já existe um Cras com esse nome.'})
+            raise ValidationError({'Nome': 'Já existe um Cras com esse nome.'})
 
     def save(self, *args, **kwargs):
         self.full_clean()

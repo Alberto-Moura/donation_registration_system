@@ -42,6 +42,7 @@ class DonationEntryAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     fields = (
         'id',
+        'registration_number', 
         'type_donation',
         'date_of_contact',
         'withdrawal_date',
@@ -56,9 +57,9 @@ class DonationEntryAdmin(admin.ModelAdmin):
         'observation',
     )
 
-    list_display = ('id', 'type_donation', 'date_of_contact', 'typesInstitution', 'name', 'created_at', 'updated_at')
-    search_fields = ('id', 'type_donation', 'date_of_contact', 'typesInstitution__type', 'name__name')
-    list_filter = ('id', 'type_donation', 'date_of_contact', 'typesInstitution', 'name')
+    list_display = ('id', 'registration_number', 'type_donation', 'date_of_contact', 'typesInstitution', 'name', 'created_at', 'updated_at')
+    search_fields = ('id', 'registration_number', 'type_donation', 'date_of_contact', 'typesInstitution__type', 'name__name')
+    list_filter = ('id', 'registration_number', 'type_donation', 'date_of_contact', 'typesInstitution', 'name')
     ordering = ('-id', 'date_of_contact', 'name')
     list_per_page = 40
     inlines = [DonatedItemInline, DonatedDisposalInline]
